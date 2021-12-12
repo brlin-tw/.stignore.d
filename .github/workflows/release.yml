@@ -7,7 +7,7 @@
 #
 # Copyright 2021 林博仁(Buo-ren, Lin) <Buo.Ren.Lin@gmail.com>
 # SPDX-License-Identifier: CC-BY-SA-4.0
-name: 釋出產品與其建構產物
+name: Release product and other build artifacts
 on:
   push:
     tags:
@@ -15,32 +15,32 @@ on:
 
 jobs:
   release:
-    name: 使用 pre-commit 檢查專案中的潛在問題
+    name: Release products of this project
     runs-on: ubuntu-20.04
     steps:
-      - name: 自版控庫取出內容
+      - name: Checkout content from repository
         uses: actions/checkout@v2
 
-      - name: 判斷專案識別名
+      - name: Determine peoject ID
         run: printf "project_id=${GITHUB_REPOSITORY##*/}\\n" >> $GITHUB_ENV
 
-      - name: 判斷釋出 Git 標簽名
+      - name: Determine release tag
         run: printf "release_tag=${GITHUB_REF##*/}\\n" >> $GITHUB_ENV
 
-      - name: 判斷釋出版本號
+      - name: Determine release version
         run: printf "release_version=${release_tag#v}\\n" >> $GITHUB_ENV
 
-      - name: 決定釋出識別名
+      - name: Determin release ID
         run: printf "release_id=${project_id}-${release_version}\\n" >> $GITHUB_ENV
 
-      - name: 產出釋出包
+      - name: Generate release package
         run: >-
           git archive
           --prefix="${release_id}/"
           --output="${release_id}.tar.gz"
           "${release_tag}"
 
-      - name: 將建構產物上傳到 GitHub Releases
+      - name: Upload build artifacts to GitHub Releases
         uses: softprops/action-gh-release@v0.1.13
         with:
           files: |

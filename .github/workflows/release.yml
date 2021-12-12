@@ -30,7 +30,7 @@ jobs:
       - name: Determine release version
         run: printf "release_version=${release_tag#v}\\n" >> $GITHUB_ENV
 
-      - name: Determin release ID
+      - name: Determine release ID
         run: printf "release_id=${project_id}-${release_version}\\n" >> $GITHUB_ENV
 
       - name: Generate release package
